@@ -40,11 +40,17 @@ app.get('/api/v1/restuarent/:id', async (req, res) => {
     try {
         const { id } = req.params
         const { rows } = await query(`SELECT * FROM restuarents WHERE id = ${id}`)
+
+        // const { rows } = await query(
+        //     "SELECT $2 ,$3 ,$4 FROM restuarents WHERE id = $1", [id, 'name', 'location', 'price_range']
+        // );
+
         res.status(200).json({
             success: true,
-            data: rows
+            data: rows[0]
         })
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             success: false,
             error: "SERVER ERROR"
@@ -53,6 +59,26 @@ app.get('/api/v1/restuarent/:id', async (req, res) => {
 })
 
 
+app.post('/api/v1/restuarent/create', async (req, res) => {
+    try {
+        const { name, location, price_range } = req.body
+
+        const { rows } = await query(
+            "INSERT INTO restuarents (name,location,price_range) VALUES($1, $2, $3) returning *", [name, location, price_range]
+        )
+
+        res.status(200).json({
+            success: true,
+            data: rows[0]
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            error: "SERVER ERROR"
+        })
+    }
+})
 
 
 
