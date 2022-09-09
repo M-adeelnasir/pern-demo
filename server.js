@@ -103,6 +103,22 @@ app.put('/api/v1/restuarent/update/:id', async (req, res) => {
 })
 
 
+app.delete('/api/v1/restuarent/remove/:id', async (req, res) => {
+    try {
+        const { id } = req.params
+        await query("DELETE FROM restuarents WHERE id=$1", [id])
+        res.status(200).json({
+            success: true,
+            data: "restuarent deleted"
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            error: "SERVER ERROR"
+        })
+    }
+})
 
 
 app.listen(PORT, () => {
