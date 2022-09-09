@@ -81,6 +81,29 @@ app.post('/api/v1/restuarent/create', async (req, res) => {
 })
 
 
+app.put('/api/v1/restuarent/update/:id', async (req, res) => {
+    try {
+        const { name, location, price_range } = req.body
+        const { id } = req.params
+
+        const { rows } = await query(
+            "UPDATE restuarents SET name= $1 ,location= $2 ,price_range= $3 WHERE id=$4 returning *", [name, location, price_range, id]
+        )
+        res.status(200).json({
+            success: true,
+            data: rows[0]
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            error: "SERVER ERROR"
+        })
+    }
+})
+
+
+
 
 app.listen(PORT, () => {
     console.log("Server os listening at port 1337");
