@@ -17,7 +17,18 @@ export const ResturentProvider = (props) => {
         }
     }
 
-    return <ResturentContext.Provider value={{ resturents, setResturents, fetchData }}>
+
+    const addResturents = async (name, location, price_range) => {
+        try {
+            const data = await axios.post('http://localhost:4000/api/v1/restuarent/create', { name, location, price_range })
+
+            setResturents([...resturents, data.data.data])
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    return <ResturentContext.Provider value={{ resturents, setResturents, fetchData, addResturents }}>
         {props.children}
     </ResturentContext.Provider>
 }
