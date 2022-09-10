@@ -121,6 +121,52 @@ app.delete('/api/v1/restuarent/remove/:id', async (req, res) => {
 })
 
 
+//reviews
+app.get('/api/v1/reviews/:resturentid', async (req, res) => {
+    try {
+        const { resturentid } = req.params
+
+        const { rows } = await query(
+            "SELECT * FROM reviews WHERE restuarent_id=$1", [resturentid]
+        )
+        console.log(rows);
+        res.status(200).json({
+            success: true,
+            data: rows
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            error: "SERVER ERROR"
+        })
+    }
+})
+
+
+app.post('/api/v1/reviews/:resturentid', async (req, res) => {
+    try {
+        const { resturentid } = req.params
+        const { name, review, ratings } = req.body
+
+        const { rows } = await query(
+            "INSERT INTO reviews (restuarent_id,name,review,ratings) VALUES ($1,$2,$3,$4)", [resturentid, name, review, ratings]
+        )
+        console.log(rows);
+        res.status(200).json({
+            success: true,
+            data: rows
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            error: "SERVER ERROR"
+        })
+    }
+})
+
+
 app.listen(PORT, () => {
     console.log("Server os listening at port 4000");
 })
