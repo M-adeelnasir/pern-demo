@@ -122,5 +122,5 @@ app.delete('/api/v1/restuarent/remove/:id', async (req, res) => {
 
 
 app.listen(PORT, () => {
-    console.log("Server os listening at port 1337");
+    console.log("Server os listening at port 4000");
 })
